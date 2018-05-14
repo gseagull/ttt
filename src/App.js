@@ -3,6 +3,27 @@ import ReactDOM from 'react-dom';
 import logo from './logo.svg';
 import './App.css';
 
+//var cache = require('persistent-cache');
+//var gameCache = cache();
+/*
+var storage = require('node-persist');
+var http = require('http');
+	storage.init({
+	dir:'c:',
+	stringify: JSON.stringify,
+	parse: JSON.parse,
+	encoding: 'utf8',
+	logging: false,
+	continuous: true,
+	interval: false
+});
+*/
+//  var dirty = require('dirty');
+//  var db = dirty('user.db');
+//const Store = require('data-store');
+//const db = new Store({ path: 'config.json' });  
+var cache = require('memory-cache');
+ 
 function Square(props) {
   return (
     <button className="square" onClick={props.onClick}>
@@ -65,6 +86,9 @@ class Game extends React.Component {
   }
 
   handleClick(i) {
+//db.set('myData', this.state.squares);
+cache.put('myData', this.state.squares);
+alert(cache.get('myData'));	
     const squares = this.state.squares;
     if (calculateWinner(squares) || squares[i]) {
       return;
