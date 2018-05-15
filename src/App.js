@@ -63,10 +63,10 @@ class Game extends React.Component {
     super(props);
 	remoteSocket.customInfo = publicState;
     this.state = {
-	  squares: Array(9).fill(null),
-      stepNumber: 0,
-      isFirstPlayer: true,
-	  currentPlayer: "X"
+		squares: Array(9).fill(null),
+		stepNumber: 0,
+		isFirstPlayer: true,
+		currentPlayer: "X"
     };
 
    remoteSocket.on('myData', (newState) => {
@@ -74,20 +74,20 @@ class Game extends React.Component {
 		if( (newState.currentPlayer===remoteSocket.customInfo.currentPlayer) && (newState.stepNumber===remoteSocket.customInfo.stepNumber) ) {
 			return;
 		}
-		//restart game request
-		if(newState.stepNumber===0) {
+		// Restart game request
+		if( (newState.currentPlayer!=remoteSocket.customInfo.currentPlayer) && (newState.stepNumber===0)) {
 			this.setState({
-			  squares: Array(9).fill(null),
-			  stepNumber: 0,
-			  isFirstPlayer: true,
-			  currentPlayer: "X"	  
+				squares: Array(9).fill(null),
+				stepNumber: 0,
+				isFirstPlayer: true,
+				currentPlayer: "X"	  
 			});		
 		}
 		else {
 			this.setState({
-			  squares: newState.squares,
-			  stepNumber: newState.stepNumber,
-			  isFirstPlayer: !newState.isFirstPlayer		  
+				squares: newState.squares,
+				stepNumber: newState.stepNumber,
+				isFirstPlayer: !newState.isFirstPlayer		  
 			});
 		}
     });		
@@ -104,16 +104,6 @@ class Game extends React.Component {
 		if(this.state.isFirstPlayer===true) {
 			player="X";
 		}
-		this.state.currentPlayer=player;
-		/*
-		this.setState({
-		  squares: this.state.squares,
-		  stepNumber: this.state.stepNumber,
-		  isFirstPlayer: this.state.isFirstPlayer,			
-		  currentPlayer: player
-		});
-		*/
-		
 	}
 	this.forceUpdate();
 	if(( ((isOdd(this.state.stepNumber))===true) && (this.state.currentPlayer==="X") ) ||  (((isEven(this.state.stepNumber))===true) && (this.state.currentPlayer==="O") ) ){
@@ -124,11 +114,10 @@ class Game extends React.Component {
 
 	remoteSocket.customInfo.currentPlayer=this.state.currentPlayer;
 	remoteSocket.customInfo.stepNumber=this.state.stepNumber+1;
-    squares[i] = this.state.isFirstPlayer ? "X" : "O";
+	squares[i] = this.state.isFirstPlayer ? "X" : "O";
 	this.setState({
-		  squares: squares,
-		  stepNumber: ++this.state.stepNumber //,
-		  //isFirstPlayer: !this.state.isFirstPlayer,		  
+		squares: squares,
+		stepNumber: ++this.state.stepNumber 	  
 	});
 	remoteSocket.emit('myData', this.state);
   }
@@ -136,22 +125,22 @@ class Game extends React.Component {
  
   restartGame() {
     this.setState({
-      stepNumber: 0,
-	  squares: Array(9).fill(null),
-      isFirstPlayer: true,
-	  currentPlayer: "X"
+		stepNumber: 0,
+		squares: Array(9).fill(null),
+		isFirstPlayer: true,
+		currentPlayer: "X"
     });
+	this.state.stepNumber=0;
 	remoteSocket.customInfo.currentPlayer="X";
 	remoteSocket.customInfo.stepNumber=0;
-	remoteSocket.emit('myData', this.state);			
+	remoteSocket.emit('myData', this.state);		
   }  
 
   render() {
 
     const winner = calculateWinner(this.state.squares);
-
     let status;
-	let gameOverClass="game-info";
+    let gameOverClass="game-info";
     if (winner) {
 		status = "The Winner is: " + winner;
 		gameOverClass="game-over";
