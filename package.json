@@ -2,6 +2,7 @@
   "name": "ttt",
   "version": "0.1.0",
   "private": true,
+  //"proxy": "http://glacial-caverns-87661.herokuapp.com:5000",
   "dependencies": {
     "data-store": "^3.0.0",
     "dirty": "^1.1.0",
@@ -27,7 +28,10 @@
   },
   "scripts": {
     "start": "node server.js",
-    "server": "react-scripts start",
+	"client": "cd client && npm run start",
+	"postinstall" : "npm run build",
+    "server": "nodemon server.js",
+	"install": "cd client && npm install && npm run build && cd ..",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
