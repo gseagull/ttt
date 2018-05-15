@@ -27,8 +27,8 @@ app.get('*', (req, res) => {
 const port = 8000;
 app.listen(port);
 
-const io2 = socketIO(server);
- io2.on('connection', (socket) => {
+//const io2 = socketIO(server);
+ app.on('connection', (socket) => {
   console.log('Client connected');
   socket.on('disconnect', () => console.log('Client disconnected'));
 });
