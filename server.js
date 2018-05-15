@@ -1,4 +1,4 @@
-const io = require('socket.io');
+const io = require('socket.io')();
 const express = require('express');
 const port = process.env.PORT || 3000;
 var socket=io.listen(port);
