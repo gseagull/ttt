@@ -10,7 +10,8 @@ var protocol = window.location.protocol;
 var slashes = protocol.concat("//");
 var host = slashes.concat(window.location.hostname);
 
-const socket2 = socketIOClient(host+":"+process.env.PORT);//'http://localhost:8000');
+//const socket2 = socketIOClient(host+":"+process.env.PORT);//'http://localhost:8000');
+const socket2 = socketIOClient("https://glacial-caverns-87661.herokuapp.com/");//'http://localhost:8000');
 
 //var cache = require('persistent-cache');
 //var gameCache = cache();
