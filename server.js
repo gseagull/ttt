@@ -1,5 +1,5 @@
 const io = require('socket.io')();
-const express = require('express');
+const express = require('express')();
 const port = process.env.PORT || 3000;
 var socket=io.listen(port);
 console.log('listening on port ', port);
