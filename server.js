@@ -1,7 +1,8 @@
+const io = require('socket.io')();
 const port = process.env.PORT || 3000;
 var socket=io.listen(port);
 console.log('listening on port ', port);
-const io = require('socket.io')();
+
 
 const server = express()
   .use((req, res) => res.sendFile(INDEX) )
