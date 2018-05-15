@@ -39,7 +39,7 @@ io.on('connection', socket => {
 
 
 const port = process.env.PORT || 3000;
-var socket=io.listen(port);
+var socket=io.listen(port,'0.0.0.0');
 console.log('listening on port ', port);
 /*
 socket.sockets.on('connection', function (socket) {
