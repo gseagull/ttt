@@ -26,7 +26,7 @@
     "store-cache": "^0.1.0"
   },
   "scripts": {
-    "start": "node server",
+    "start": "react-scripts start",
     "server": "node server.js",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
