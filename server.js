@@ -6,7 +6,6 @@ console.log('listening on port ', port);
 
 
 const server = express()
-  .use((req, res) => res.sendFile(INDEX) )
   .listen(port, () => console.log(`Listening on ${ port }`));
  
 const io2 = socketIO(server);
