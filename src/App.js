@@ -2,6 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import logo from './logo.svg';
 import './App.css';
+import { subscribeToTimer } from './api';
+//import { socket } from './api';
+import socketIOClient from 'socket.io-client';
+const socket2 = socketIOClient('http://localhost:8000');
 
 //var cache = require('persistent-cache');
 //var gameCache = cache();
@@ -22,8 +26,17 @@ var http = require('http');
 //  var db = dirty('user.db');
 //const Store = require('data-store');
 //const db = new Store({ path: 'config.json' });  
-var cache = require('memory-cache');
+/*var cache = require('memory-cache');
+var newCache = new cache.Cache();
+const NodeCache = require( "node-cache" );
+const myCache = new NodeCache();*/
+//var Redis = require('redis-stream');
+//var client = new Redis(6379, 'localhost', 0);
+
+//const fc = require('node-file-cache').create();
+//var memoryCache = require('memory-cache-stream');
  
+
 function Square(props) {
   return (
     <button className="square" onClick={props.onClick}>
@@ -74,31 +87,94 @@ class Board extends React.Component {
     );
   }
 }
-
+ var publicState = {
+      stepNumber: 0,
+ 	  currentPlayer: "X"  
+  }  
+  
+ 
 class Game extends React.Component {
+
   constructor(props) {
     super(props);
+	socket2.customInfo = publicState;
     this.state = {
 	  squares: Array(9).fill(null),
       stepNumber: 0,
-      isFirstPlayer: true
+      isFirstPlayer: true,
+	  currentPlayer: "X"
     };
-  }
+	subscribeToTimer((err, timestamp) => this.setState({ 
+		timestamp 
+    }));
 
+   socket2.on('myData', (newState) => {
+      
+		// Same client, nothing to update
+
+		if( (newState.currentPlayer===socket2.customInfo.currentPlayer) && (newState.stepNumber===socket2.customInfo.stepNumber) ) {
+			return;
+		}
+		this.setState({
+		  squares: newState.squares,
+		  stepNumber: newState.stepNumber,
+		  isFirstPlayer: !newState.isFirstPlayer		  
+		});
+	  
+	  
+    });		
+ 
+  }
+  /*
+  	state = {
+	  timestamp: 'no timestamp yet'
+	};
+*/
+
+  
   handleClick(i) {
-//db.set('myData', this.state.squares);
-cache.put('myData', this.state.squares);
-alert(cache.get('myData'));	
+  
+    
+	// The only valid situation in which player 'Key' is set
+	if( (this.state.stepNumber===1) && (this.state.isFirstPlayer===false) ){
+		//this.state.currentPlayer = this.state.isFirstPlayer ? "X" : "O";
+		var player="O";
+		if(this.state.isFirstPlayer===true) {
+			player="X";
+		}
+		this.state.currentPlayer=player;
+		this.setState({
+		  squares: this.state.squares,
+		  stepNumber: this.state.stepNumber,
+		  isFirstPlayer: this.state.isFirstPlayer,			
+		  currentPlayer: player
+		});
+		
+	}
+	this.forceUpdate();
+	if(( ((isOdd(this.state.stepNumber))===true) && (this.state.currentPlayer==="X") ) ||  (((isEven(this.state.stepNumber))===true) && (this.state.currentPlayer==="O") ) ){
+		alert('You need to wait for the second player move!');
+		return;
+	}
+	
     const squares = this.state.squares;
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
+	socket2.customInfo.currentPlayer=this.state.currentPlayer;
+	socket2.customInfo.stepNumber=this.state.stepNumber+1;
     squares[i] = this.state.isFirstPlayer ? "X" : "O";
-    this.setState({
-	  squares: squares,
-      stepNumber: this.state.stepNumber + 1,
-      isFirstPlayer: !this.state.isFirstPlayer
-    });
+	/*this.state.squares = squares;
+	this.state.stepNumber = this.state.stepNumber + 1;
+	this.state.isFirstPlayer = !this.state.isFirstPlayer;
+	*/
+	this.setState({
+		  squares: squares,
+		  stepNumber: ++this.state.stepNumber //,
+		  //isFirstPlayer: !this.state.isFirstPlayer,		  
+	});
+// 	const socket3 = socketIOClient('http://localhost:8000');
+	socket2.emit('myData', this.state);
   }
 
  
@@ -106,11 +182,13 @@ alert(cache.get('myData'));
     this.setState({
       stepNumber: 0,
 	  squares: Array(9).fill(null),
-      isFirstPlayer: true
+      isFirstPlayer: true,
+	  currentPlayer: "X"
     });
   }  
 
   render() {
+
     const winner = calculateWinner(this.state.squares);
 
     let status;
@@ -167,6 +245,14 @@ function calculateWinner(squares) {
     }
   }
   return null;
+}
+
+function isEven(num) {
+    return num % 2 === 0;
+}
+
+function isOdd(num) {
+    return num % 2 === 1;
 }
 
 
