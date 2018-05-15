@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import logo from './logo.svg';
 import './App.css';
-import { subscribeToTimer } from './api';
+//import { subscribeToTimer } from './api';
 //import { socket } from './api';
 import socketIOClient from 'socket.io-client';
 
@@ -10,7 +10,7 @@ var protocol = window.location.protocol;
 var slashes = protocol.concat("//");
 var host = slashes.concat(window.location.hostname);
 
-const socket2 = socketIOClient(host+":8000");//'http://localhost:8000');
+const socket2 = socketIOClient(host+":"+process.env.PORT);//'http://localhost:8000');
 
 //var cache = require('persistent-cache');
 //var gameCache = cache();
@@ -109,10 +109,10 @@ class Game extends React.Component {
       isFirstPlayer: true,
 	  currentPlayer: "X"
     };
-	subscribeToTimer((err, timestamp) => this.setState({ 
+/*	subscribeToTimer((err, timestamp) => this.setState({ 
 		timestamp 
     }));
-
+*/
    socket2.on('myData', (newState) => {
       
 		// Same client, nothing to update
