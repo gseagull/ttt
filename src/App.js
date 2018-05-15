@@ -75,7 +75,7 @@ class Game extends React.Component {
 			return;
 		}
 		// Restart game request
-		if( (newState.currentPlayer!=remoteSocket.customInfo.currentPlayer) && (newState.stepNumber===0)) {
+		if( (newState.currentPlayer!==remoteSocket.customInfo.currentPlayer) && (newState.stepNumber===0)) {
 			this.setState({
 				squares: Array(9).fill(null),
 				stepNumber: 0,
@@ -100,12 +100,21 @@ class Game extends React.Component {
     }   
 	// The only valid situation in which player 'Key' is set
 	if( (this.state.stepNumber===1) && (this.state.isFirstPlayer===false) ){
+		//this.state.currentPlayer = this.state.isFirstPlayer ? "X" : "O";
 		var player="O";
 		if(this.state.isFirstPlayer===true) {
 			player="X";
 		}
+		this.state.currentPlayer=player;
+		this.setState({
+			squares: this.state.squares,
+			stepNumber: this.state.stepNumber,
+			isFirstPlayer: this.state.isFirstPlayer,			
+			currentPlayer: player
+		});
+		
 	}
-	this.forceUpdate();
+	//this.forceUpdate();
 	if(( ((isOdd(this.state.stepNumber))===true) && (this.state.currentPlayer==="X") ) ||  (((isEven(this.state.stepNumber))===true) && (this.state.currentPlayer==="O") ) ){
 		alert('You need to wait for the second player move!');
 		return;
