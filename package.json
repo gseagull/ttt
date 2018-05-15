@@ -2,7 +2,7 @@
   "name": "ttt",
   "version": "0.1.0",
   "private": true,
-  //"proxy": "http://glacial-caverns-87661.herokuapp.com:5000",
+
   "dependencies": {
     "data-store": "^3.0.0",
     "dirty": "^1.1.0",
