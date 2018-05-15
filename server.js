@@ -1,4 +1,17 @@
+const port = process.env.PORT || 3000;
+var socket=io.listen(port);
+console.log('listening on port ', port);
 const io = require('socket.io')();
+
+const server = express()
+  .use((req, res) => res.sendFile(INDEX) )
+  .listen(port, () => console.log(`Listening on ${ port }`));
+ 
+const io2 = socketIO(server);
+ io2.on('connection', (socket) => {
+  console.log('Client connected');
+  socket.on('disconnect', () => console.log('Client disconnected'));
+});
 io.on('connection', (client) => {
   client.on('subscribeToTimer', (interval) => {
     console.log('client is subscribing to timer with interval ', interval);
@@ -38,9 +51,7 @@ io.on('connection', socket => {
 
 
 
-const port = process.env.PORT || 3000;
-var socket=io.listen(port,'0.0.0.0');
-console.log('listening on port ', port);
+
 /*
 socket.sockets.on('connection', function (socket) {
     console.log('A client is connected!');
