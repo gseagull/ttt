@@ -24,7 +24,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname+'/build/index.html'));
 });
 
-const port = 8000;
+const port = process.env.PORT || 8080;
 app.listen(port);
 
 //const io2 = socketIO(server);
