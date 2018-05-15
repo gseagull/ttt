@@ -5,7 +5,12 @@ import './App.css';
 import { subscribeToTimer } from './api';
 //import { socket } from './api';
 import socketIOClient from 'socket.io-client';
-const socket2 = socketIOClient('http://localhost:8000');
+
+var protocol = window.location.protocol;
+var slashes = protocol.concat("//");
+var host = slashes.concat(window.location.hostname);
+
+const socket2 = socketIOClient(host+":8000");//'http://localhost:8000');
 
 //var cache = require('persistent-cache');
 //var gameCache = cache();
