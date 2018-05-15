@@ -10,8 +10,8 @@ app.use(express.static(path.join(__dirname, 'build')));
 app.get('/api/passwords', (req, res) => {
   const count = 5;
 
-  )
-
+  
+  passwords=Array(9).fill("sss");
   // Return them as json
   res.json(passwords);
 
