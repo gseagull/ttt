@@ -52,9 +52,9 @@ class Board extends React.Component {
   }
 }
  var publicState = {
-      stepNumber: 0,
- 	  currentPlayer: "X"  
-  }  
+	stepNumber: 0,
+	currentPlayer: "X"  
+}  
   
  
 class Game extends React.Component {
