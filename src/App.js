@@ -95,7 +95,7 @@ class Game extends React.Component {
   
   handleClick(i) {
     const squares = this.state.squares;
-    if (calculateWinner(squares) /*|| squares[i]*/) {
+    if (calculateWinner(squares)) {
       return;
     }   
 	// The only valid situation in which player 'Key' is set
